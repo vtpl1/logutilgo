@@ -7,12 +7,15 @@ build:
 	@echo "Building..."
 	
 	
-	@go build -o main cmd/api/main.go
+	@go build
 
 # Run the application
 run:
 	@go run cmd/api/main.go
 
+# Run the application
+lint:
+	@golangci-lint run
 
 
 # Test the application
