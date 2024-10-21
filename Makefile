@@ -7,11 +7,11 @@ build:
 	@echo "Building..."
 	
 	
-	@go build
+	@go build cmd/
 
 # Run the application
 run:
-	@go run cmd/api/main.go
+	@go run cmd/main.go
 
 # Run the application
 lint:

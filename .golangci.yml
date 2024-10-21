@@ -1,5 +1,8 @@
 # SPDX-License-Identifier: MIT
 
+run:
+  timeout: 5m
+
 linters-settings:
   govet:
     enable:
@@ -22,13 +25,22 @@ linters-settings:
       - ^panic$
       - ^print(ln)?$
 
+  revive:
+    # Disable specific rules
+    rules:
+      - name: package-comments
+        disabled: true
+      
+
 linters:
   enable:
     - asciicheck       # Simple linter to check that your code does not contain non-ASCII identifiers
     - bidichk          # Checks for dangerous unicode character sequences
     - bodyclose        # checks whether HTTP response body is closed successfully
+    - canonicalheader # checks whether net/http.Header uses canonical header
     - contextcheck     # check the function whether use a non-inherited context
     - decorder         # check declaration order and count of types, constants, variables and functions
+    - copyloopvar      # detects places where loop variables are copied (Go 1.22+)
     - dogsled          # Checks assignments with too many blank identifiers (e.g. x, _, _, _, := f())
     - dupl             # Tool for code clone detection
     - durationcheck    # check for two durations multiplied together
@@ -36,8 +48,7 @@ linters:
     - errchkjson       # Checks types passed to the json encoding functions. Reports unsupported types and optionally reports occations, where the check for the returned error can be omitted.
     - errname          # Checks that sentinel errors are prefixed with the `Err` and error types are suffixed with the `Error`.
     - errorlint        # errorlint is a linter for that can be used to find code that will cause problems with the error wrapping scheme introduced in Go 1.13.
-    - exhaustive       # check exhaustiveness of enum switch statements
-    - exportloopref    # checks for pointers to enclosing loop variables
+    - exhaustive       # check exhaustiveness of enum switch statements    
     - forbidigo        # Forbids identifiers
     - forcetypeassert  # finds forced type assertions
     - gci              # Gci control golang package import order and make it always deterministic.
@@ -47,12 +58,11 @@ linters:
     - goconst          # Finds repeated strings that could be replaced by a constant
     - gocritic         # The most opinionated Go source code linter
     - godox            # Tool for detection of FIXME, TODO and other comment keywords
-    - err113         # Golang linter to check the errors handling expressions
+    - err113           # Golang linter to check the errors handling expressions
     - gofmt            # Gofmt checks whether code was gofmt-ed. By default this tool runs with -s option to check for code simplification
     - gofumpt          # Gofumpt checks whether code was gofumpt-ed.
     - goheader         # Checks is file header matches to pattern
     - goimports        # Goimports does everything that gofmt does. Additionally it checks unused imports
-    - gomoddirectives  # Manage the use of 'replace', 'retract', and 'excludes' directives in go.mod.
     - gomodguard       # Allow and block list linter for direct Go module dependencies. This is different from depguard where there are different block types for example version constraints and module recommendations.
     - goprintffuncname # Checks that printf-like functions are named with `f` at the end
     - gosec            # Inspects source code for security problems
@@ -79,12 +89,14 @@ linters:
     - wastedassign     # wastedassign finds wasted assignment statements
     - whitespace       # Tool for detection of leading and trailing whitespace
   disable:
+    - exportloopref    # [not necessary from Go 1.22] checks for pointers to enclosing loop variables
     - depguard         # Go linter that checks if package imports are in a list of acceptable packages
     - containedctx     # containedctx is a linter that detects struct contained context.Context field
     - cyclop           # checks function and package cyclomatic complexity
     - funlen           # Tool for detection of long functions
     - gocyclo          # Computes and checks the cyclomatic complexity of functions
     - godot            # Check if comments end in a period
+    - gomoddirectives  # Manage the use of 'replace', 'retract', and 'excludes' directives in go.mod.
     - gomnd            # An analyzer to detect magic numbers.
     - ireturn          # Accept Interfaces, Return Concrete Types
     - lll              # Reports long lines

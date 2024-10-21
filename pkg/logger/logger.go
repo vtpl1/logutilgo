@@ -23,6 +23,7 @@ type Logger struct {
 	zerolog.Logger
 	// MemoryLog to view logs from API
 	MemoryLog *circularBuffer
+	modules   map[string]string
 }
 
 // New logger is created depending upon the requirement
@@ -50,9 +51,18 @@ func New(logConfig LogConfig) (*Logger, error) {
 	}
 	memoryLog := newBuffer(16)
 	writer := zerolog.MultiLevelWriter(logWriter, memoryLog)
+	// modules log levels
+	modules := map[string]string{
+		"format": "", // useless, but anyway
+		"level":  "info",
+		"output": "stdout", // TODO: change to stderr someday
+		"time":   zerolog.TimeFormatUnixMs,
+	}
+
 	logger := &Logger{
 		zerolog.New(writer).With().Timestamp().Logger(),
 		memoryLog,
+		modules,
 	}
 	return logger, nil
 }
